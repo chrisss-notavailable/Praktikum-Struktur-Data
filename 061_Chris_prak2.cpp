@@ -10,6 +10,12 @@ string toLowerCase(string str){
     return str;
 }
 
+
+
+// alurnya :
+// Input - lingkedlist - queue - file
+// file - lingkedlist - output
+
 // STRUCT PROGRAM
 
 struct servis {
@@ -174,7 +180,7 @@ void tambahSS() {
     getline(cin,merek);
     cout << "Kendala :";
     getline(cin,kendala);
-    cout << "Montir :";
+    cout << "Montir (Suby,Farhan,Dimas,Aldo,Rafi):";
     getline (cin,montir);
     cout << "Nama Pelanggan :";
     getline (cin,nama);
@@ -287,50 +293,61 @@ void dataCust () {
 
 
 void semuaDataCust() {
+if(headCust == NULL){
+    cout << "Belum ada data pelanggan.\n";
+    system("pause");
+    return;
+}
 
-    if(headCust == NULL){
-        cout << "Belum ada data pelanggan.\n";
-        system("pause");
-        return;
+cout << "\n====== SEMUA PELANGGAN ======\n";
+
+cust* cari = headCust;
+
+do {
+    cout << "-----------------------\n";
+    cout << "Nama: " << cari->nama << endl;
+    cout << "Nomor Telepon: " << cari->no << endl;
+    cout << "Alamat: " << cari->alamat << endl;
+
+    servis* cariAntri = frontServis;
+    servis* servisTerakhir = NULL;
+
+
+    while(cariAntri != NULL){
+        if(toLowerCase(cariAntri->namac) == toLowerCase(cari->nama)){
+            servisTerakhir = cariAntri;
+        }
+        cariAntri = cariAntri->next;
     }
 
-    cout << "\n====== SEMUA PELANGGAN ======\n";
+    if(servisTerakhir == NULL){
+        servis* cariHistory = selesaiServis;
 
-    cust* current = headCust;
-
-    do {
-        cout << "-----------------------\n";
-        cout << "Nama: " << current->nama << endl;
-        cout << "Nomor Telepon: " << current->no << endl;
-        cout << "Alamat: " << current->alamat << endl;
-
-        servis* bantuServis = frontServis;
-        servis* servisTerakhir = NULL;
-
-        while(bantuServis != NULL){
-            if(toLowerCase(bantuServis->namac) == toLowerCase(current->nama)){
-                servisTerakhir = bantuServis;
+        while(cariHistory != NULL){
+            if(toLowerCase(cariHistory->namac) == toLowerCase(cari->nama)){
+                servisTerakhir = cariHistory;
             }
-            bantuServis = bantuServis->next;
+            cariHistory = cariHistory->next;
         }
+    }
 
-        if(servisTerakhir != NULL){
-            cout << "___Servis Terakhir___\n";
-            cout << "Mobil: " << servisTerakhir->model << endl;
-            cout << "Kendala: " << servisTerakhir->kendala << endl;
-            cout << "Montir: " << servisTerakhir->montir << endl;
-        }
-        else{
-            cout << "Belum pernah melakukan servis.\n";
-        }
+    if(servisTerakhir != NULL){
+        cout << "___Servis Terakhir___\n";
+        cout << "Mobil: " << servisTerakhir->model << endl;
+        cout << "Kendala: " << servisTerakhir->kendala << endl;
+        cout << "Montir: " << servisTerakhir->montir << endl;
+    }
+    else{
+        cout << "Belum pernah melakukan servis.\n";
+    }
 
-        cout << "-----------------------\n";
+    cout << "-----------------------\n";
 
-        current = current->next;
+    cari = cari->next;
 
-    } while(current != headCust);
+} while(cari != headCust);
 
-    system("pause");
+system("pause");
 }
 
 void servisSelesai(){
@@ -348,21 +365,21 @@ void servisSelesai(){
 
     while(cari != NULL){
 
-        bool montir = false;
+        bool montirAda = false;
 
         for(int i=0;i<jumlahMontir;i++){
             if(toLowerCase(daftarMontir[i]) == toLowerCase(cari->montir)){
-            montir = true;
+                montirAda = true;
                 break;
             }
         }
 
-        if(!montir){
+        if(!montirAda){
             daftarMontir[jumlahMontir] = cari->montir;
             jumlahMontir++;
         }
 
-        cari = cari ->next;
+        cari = cari->next;
     }
 
     cout << "\nPilih Montir!\n";
@@ -406,17 +423,6 @@ void servisSelesai(){
         return;
     }
 
-    if(prevTarget == NULL){
-        frontServis = target->next;
-    }
-    else{
-        prevTarget->next = target->next;
-    }
-
-    if(target == rearServis){
-        rearServis = prevTarget;
-    }
-
     cout << "\n======== SERVIS ========\n";
     cout << "Tanggal Masuk :" << target->masuk << endl;
     cout << "Model Mobil :" << target->model << endl;
@@ -435,6 +441,17 @@ void servisSelesai(){
 
     if(status == 'y'){
 
+        if(prevTarget == NULL){
+            frontServis = target->next;
+        }
+        else{
+            prevTarget->next = target->next;
+        }
+
+        if(target == rearServis){
+            rearServis = prevTarget;
+        }
+
         target->next = selesaiServis;
         selesaiServis = target;
 
@@ -444,14 +461,11 @@ void servisSelesai(){
     }
     else if(status == 'n'){
 
-        masukServis(target);
-
-        cout << "Servis dikembalikan ke antrian\n";
+        cout << "Servis tetap berada di antrian\n";
     }
     else{
 
         cout << "Input tidak valid\n";
-        masukServis(target);
     }
 
     simpanServis();

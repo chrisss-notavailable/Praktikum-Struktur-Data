@@ -172,7 +172,7 @@ void tambahSS() {
     cin.ignore();
     string model,merek,kendala,montir,nama,masuk;
 
-    cout << "Tamggal Masuk : ";
+    cout << "Tanggal Masuk : ";
     getline(cin,masuk);
     cout << "Model mobil :";
     getline(cin,model);
@@ -180,7 +180,7 @@ void tambahSS() {
     getline(cin,merek);
     cout << "Kendala :";
     getline(cin,kendala);
-    cout << "Montir (Suby,Farhan,Dimas,Aldo,Rafi):";
+    cout << "Montir (Suby,Farhan,Dimas,Aldo):";
     getline (cin,montir);
     cout << "Nama Pelanggan :";
     getline (cin,nama);
